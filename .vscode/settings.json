@@ -1,0 +1,11 @@
+{
+    "java.configuration.updateBuildConfiguration": "automatic",
+    "java.server.launchMode": "Standard",
+    "cSpell.words": [
+        "Checkstyle",
+        "Javalin",
+        "OHMNET",
+        "todos",
+        "Unirest"
+    ]
+}
