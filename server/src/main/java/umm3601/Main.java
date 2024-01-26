@@ -2,8 +2,7 @@ package umm3601;
 
 import java.io.IOException;
 
-import umm3601.todos.TodoController;
-import umm3601.todos.TodoDatabase;
+import umm3601.todo.TodoController;
 import umm3601.user.UserController;
 
 public class Main {

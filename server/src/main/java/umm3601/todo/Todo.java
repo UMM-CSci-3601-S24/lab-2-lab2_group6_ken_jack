@@ -1,4 +1,4 @@
-package umm3601.user;
+package umm3601.todo;
 
 // There are two examples of suppressing CheckStyle
 // warnings in this class. If you create new classes
@@ -16,7 +16,7 @@ package umm3601.user;
 // check in CheckStyle so that we don't get a failed
 // build when Gradle runs CheckStyle.
 @SuppressWarnings({"VisibilityModifier"})
-public class User {
+public class Todo {
   // By default Java field names shouldn't start with underscores.
   // Here, though, we *have* to use the name `_id` to match the
   // name of the field in the database.
