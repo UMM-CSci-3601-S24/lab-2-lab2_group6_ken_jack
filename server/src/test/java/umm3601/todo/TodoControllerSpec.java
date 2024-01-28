@@ -53,7 +53,7 @@ public class TodoControllerSpec {
   // in this case `json()` calls in `TodoController`. We'll use
   // this to make assertions about the data passed to `json()`.
   @Captor
-  private ArgumentCaptor<Todo[]> todoArrayCaptor;
+  private ArgumentCaptor<Todo[]> localTodoArrayCaptor;
 
   /**
    * Setup the "database" with some example users and
@@ -123,16 +123,30 @@ public class TodoControllerSpec {
     // Here, we wait to see what happens *when ctx calls the json method* in the call
     // todoController.getTodos(ctx) and the json method is passed a Todo[]
     // (That's when the Todo[] that was passed as input to the json method is captured)
-    verify(ctx).json(todoArrayCaptor.capture());
+    verify(ctx).json(localTodoArrayCaptor.capture());
     // Now that the Todo[] that was passed as input to the json method is captured,
     // we can make assertions about it. In particular, we'll assert that its length
     // is the same as the size of the "database". We could also confirm that the
     // particular todos are the same/correct, but that can get complicated
     // since the order of the todos in the "database" isn't specified. So we'll
     // just check that the counts are correct.
-    assertEquals(db.size(), todoArrayCaptor.getValue().length);
+    assertEquals(db.size(), localTodoArrayCaptor.getValue().length);
   }
 
+  //Tests for filtering todos by owner
+  @Test
+  public void filterTodosByOwner() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("owner", Arrays.asList(new String[] {"John"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(localTodoArrayCaptor.capture());
+    for (Todo todo : localTodoArrayCaptor.getValue()) {
+      assertEquals("John", todo.owner);
+    }
+  }
   @Test
   public void canLimitTodos() throws IOException {
     // Add a query param map to the context that maps "limit"
@@ -148,11 +162,11 @@ public class TodoControllerSpec {
     todoController.getTodos(ctx);
 
     // Capture the todos that were passed to the json method
-    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(localTodoArrayCaptor.capture());
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
 
     // Assert that the length of the returned todos is 5
-    assertEquals(5, localTodoArrayCaptor.getValue().length);
+    assertEquals(5, todoArrayCaptor.getValue().length);
   }
 
   @Test
@@ -163,10 +177,10 @@ public class TodoControllerSpec {
 
     todoController.getTodos(ctx);
 
-    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(localTodoArrayCaptor.capture());
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
 
-    assertEquals(0, localTodoArrayCaptor.getValue().length);
+    assertEquals(0, todoArrayCaptor.getValue().length);
   }
 
   @Test
@@ -177,10 +191,10 @@ public class TodoControllerSpec {
 
     todoController.getTodos(ctx);
 
-    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(localTodoArrayCaptor.capture());
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
 
-    assertEquals(db.size(), localTodoArrayCaptor.getValue().length);
+    assertEquals(db.size(), todoArrayCaptor.getValue().length);
   }
 
  /*  @Test
@@ -193,6 +207,7 @@ public class TodoControllerSpec {
 
     verify(ctx).status(400); // HTTP 400 Bad Request
   } */
+
 
   /* COMMENTED OUT FOR NOW. CAN USE AS A MODEL FOR THE OTHER TESTS. - KEN
     Confirm that we can get all the users with age 25.

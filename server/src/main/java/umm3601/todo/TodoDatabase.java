@@ -90,12 +90,12 @@ public class TodoDatabase {
       throw new BadRequestResponse("Specified age '" + ageParam + "' can't be parsed to an integer");
       }
     } */
- /*  COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
-  //Filter company if defined
-    if (queryParams.containsKey("company")) {
-      String targetOwner = queryParams.get("company").get(0);
+
+  //Filter owner if defined
+    if (queryParams.containsKey("owner")) {
+      String targetOwner = queryParams.get("owner").get(0);
       filteredTodos = filterTodosByOwner(filteredTodos, targetOwner);
-    } */
+    }
     // Process other query parameters here...
 
     return filteredTodos;
@@ -113,16 +113,16 @@ public class TodoDatabase {
     return Arrays.stream(todos).filter(x -> x.owner == targetOwner).toArray(Todo[]::new);
   } */
 
- /*  COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
-    Get an array of all the todos having the target company.
+/**
+    Get an array of all the todos having the target owner.
 
-    @param todos         the list of todos to filter by company
-    @param targetCompany the target company to look for
+    @param todos         the list of todos to filter by owner
+    @param targetOwner the target owner to look for
     @return an array of all the todos from the given list that have the target
-            company
-
+            Owner
+*/
   public Todo[] filterTodosByOwner(Todo[] todos, String targetOwner) {
     return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(Todo[]::new);
-  } */
+  }
 
 }
