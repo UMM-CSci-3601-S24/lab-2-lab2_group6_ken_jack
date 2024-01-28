@@ -3,7 +3,7 @@ package umm3601.todo;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-//import java.util.Arrays;  // COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 
@@ -44,16 +44,16 @@ public class TodoDatabase {
     return allTodos.length;
   }
 
-/*   COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
+/**
     Get the single todo specified by the given ID. Return `null` if there is no
     todo with that ID.
 
     @param id the ID of the desired todo
     @return the todo with the given ID, or null if there is no todo with that ID
-
+*/
   public Todo getTodo(String id) {
     return Arrays.stream(allTodos).filter(x -> x._id.equals(id)).findFirst().orElse(null);
-  } */
+  }
 
   /**
    * Get an array of all the todos satisfying the queries in the params.

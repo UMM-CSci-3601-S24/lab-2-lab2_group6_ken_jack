@@ -4,8 +4,8 @@ import java.io.IOException;
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
-//import io.javalin.http.HttpStatus;  // COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
-//import io.javalin.http.NotFoundResponse;  // COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
+import io.javalin.http.HttpStatus;
+import io.javalin.http.NotFoundResponse;
 import umm3601.Controller;
 
 /**
@@ -48,10 +48,11 @@ public class TodoController implements Controller {
   }
 
   // COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
-/*     Get the single todo specified by the `id` parameter in the request.
+  /**
+     Get the single todo specified by the `id` parameter in the request.
 
     @param ctx a Javalin HTTP context
-
+*/
   public void getTodo(Context ctx) {
     String id = ctx.pathParam("id");
     Todo todo = todoDatabase.getTodo(id);
@@ -61,7 +62,7 @@ public class TodoController implements Controller {
     } else {
       throw new NotFoundResponse("No todo with id " + id + " was found.");
     }
-  } */
+  }
 
   /**
    * Get a JSON response with a list of all the todos in the "database".
@@ -95,7 +96,7 @@ public class TodoController implements Controller {
   @Override
   public void addRoutes(Javalin server) {
     // Get specific todo - COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
-    //server.get("/api/todos/{id}", this::getTodo);
+    server.get("/api/todos/{id}", this::getTodo);
 
     // List todos, filtered using query parameters
     server.get("/api/todos", this::getTodos);
