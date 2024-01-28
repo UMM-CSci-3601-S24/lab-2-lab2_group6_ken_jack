@@ -177,10 +177,10 @@ public class TodoControllerSpec {
 
     todoController.getTodos(ctx);
 
-    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(todoArrayCaptor.capture());
+    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(localTodoArrayCaptor.capture());
 
-    assertEquals(db.size(), todoArrayCaptor.getValue().length);
+    assertEquals(db.size(), localTodoArrayCaptor.getValue().length);
   }
 
  /*  @Test
