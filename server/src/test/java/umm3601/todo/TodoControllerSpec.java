@@ -2,8 +2,13 @@ package umm3601.todo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import java.io.IOException;
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
@@ -48,7 +53,7 @@ public class TodoControllerSpec {
   // in this case `json()` calls in `TodoController`. We'll use
   // this to make assertions about the data passed to `json()`.
   @Captor
-  private ArgumentCaptor<Todo[]> todoArrayCaptor;
+  private ArgumentCaptor<Todo[]> localTodoArrayCaptor;
 
   /**
    * Setup the "database" with some example users and
@@ -118,16 +123,30 @@ public class TodoControllerSpec {
     // Here, we wait to see what happens *when ctx calls the json method* in the call
     // todoController.getTodos(ctx) and the json method is passed a Todo[]
     // (That's when the Todo[] that was passed as input to the json method is captured)
-    verify(ctx).json(todoArrayCaptor.capture());
+    verify(ctx).json(localTodoArrayCaptor.capture());
     // Now that the Todo[] that was passed as input to the json method is captured,
     // we can make assertions about it. In particular, we'll assert that its length
     // is the same as the size of the "database". We could also confirm that the
     // particular todos are the same/correct, but that can get complicated
     // since the order of the todos in the "database" isn't specified. So we'll
     // just check that the counts are correct.
-    assertEquals(db.size(), todoArrayCaptor.getValue().length);
+    assertEquals(db.size(), localTodoArrayCaptor.getValue().length);
   }
 
+  //Tests for filtering todos by owner
+  @Test
+  public void filterTodosByOwner() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("owner", Arrays.asList(new String[] {"John"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(localTodoArrayCaptor.capture());
+    for (Todo todo : localTodoArrayCaptor.getValue()) {
+      assertEquals("John", todo.owner);
+    }
+  }
   /* COMMENTED OUT FOR NOW. CAN USE AS A MODEL FOR THE OTHER TESTS. - KEN
     Confirm that we can get all the users with age 25.
 
