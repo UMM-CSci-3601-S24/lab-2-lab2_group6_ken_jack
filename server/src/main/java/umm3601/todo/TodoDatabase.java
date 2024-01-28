@@ -9,6 +9,8 @@ import java.util.Map;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import io.javalin.http.BadRequestResponse;
+
 //import io.javalin.http.BadRequestResponse;  // COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
 
 /**
@@ -63,6 +65,18 @@ public class TodoDatabase {
    */
   public Todo[] listTodos(Map<String, List<String>> queryParams) {
     Todo[] filteredTodos = allTodos;
+
+    if (queryParams.containsKey("limit")) {
+       String limitParam = queryParams.get("limit").get(0);
+       try {
+           int limit = Integer.parseInt(limitParam);
+           filteredTodos = Arrays.stream(filteredTodos)
+                                .limit(limit)
+                                .toArray(Todo[]::new);
+        } catch (NumberFormatException e) {
+          throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
+           }
+  }
 
  /*  COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
   // Filter age if defined

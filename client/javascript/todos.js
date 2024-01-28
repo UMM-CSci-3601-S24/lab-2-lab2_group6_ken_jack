@@ -31,3 +31,19 @@ function getFilteredTodos() {
     document.getElementById('jsonDump').innerHTML = syntaxHighlight(JSON.stringify(returned_json, null, 2));
   });
 }
+
+//  getTodos() is called when the page loads to populate the table
+function getTodos() {
+  let limit = document.getElementById('limit').value; // Get the limit value from the input field
+  fetch('/api/todos?limit=' + limit)
+    .then((response) => {
+      if (!response.ok) {
+        throw Error(response.statusText);
+      }
+      return response.json();
+    })
+    .then((data) => {
+      // ... existing logic ...
+    });
+}
+
