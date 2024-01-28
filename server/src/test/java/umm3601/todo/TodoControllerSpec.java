@@ -162,11 +162,11 @@ public class TodoControllerSpec {
     todoController.getTodos(ctx);
 
     // Capture the todos that were passed to the json method
-    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(localTodoArrayCaptor.capture());
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
 
     // Assert that the length of the returned todos is 5
-    assertEquals(5, localTodoArrayCaptor.getValue().length);
+    assertEquals(5, todoArrayCaptor.getValue().length);
   }
 
   @Test
@@ -177,10 +177,10 @@ public class TodoControllerSpec {
 
     todoController.getTodos(ctx);
 
-    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(localTodoArrayCaptor.capture());
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
 
-    assertEquals(0, localTodoArrayCaptor.getValue().length);
+    assertEquals(0, todoArrayCaptor.getValue().length);
   }
 
   @Test
@@ -191,10 +191,10 @@ public class TodoControllerSpec {
 
     todoController.getTodos(ctx);
 
-    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(localTodoArrayCaptor.capture());
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
 
-    assertEquals(db.size(), localTodoArrayCaptor.getValue().length);
+    assertEquals(db.size(), todoArrayCaptor.getValue().length);
   }
 
  /*  @Test
