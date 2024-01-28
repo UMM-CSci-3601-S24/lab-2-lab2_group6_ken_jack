@@ -98,6 +98,16 @@ public class TodoDatabase {
     }
     // Process other query parameters here...
 
+
+    // Filter status if defined
+    if (queryParams.containsKey("status")) {
+      String statusParam = queryParams.get("status").get(0);
+      boolean targetStatus = Boolean.parseBoolean(statusParam);
+      filteredTodos = Arrays.stream(filteredTodos)
+                            .filter(todo -> todo.status == targetStatus)
+                            .toArray(Todo[]::new);
+}
+
     return filteredTodos;
   }
 

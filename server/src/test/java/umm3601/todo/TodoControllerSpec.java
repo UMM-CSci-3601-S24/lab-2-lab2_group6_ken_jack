@@ -1,6 +1,7 @@
 package umm3601.todo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -207,6 +208,51 @@ public class TodoControllerSpec {
 
     verify(ctx).status(400); // HTTP 400 Bad Request
   } */
+/*
+  @Test
+  public void statusCompleteReturnsCompleteTodos() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("status", Arrays.asList(new String[] {"complete"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
+
+    for (Todo todo : todoArrayCaptor.getValue()) {
+      assertTrue(todo.status);
+    }
+  } */
+
+  @Test
+  public void statusIncompleteReturnsIncompleteTodos() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("status", Arrays.asList(new String[] {"incomplete"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
+
+    for (Todo todo : todoArrayCaptor.getValue()) {
+      assertFalse(todo.status);
+    }
+  }
+
+  @Test
+  public void statusNullReturnsAllTodos() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(todoArrayCaptor.capture());
+
+    assertEquals(db.size(), todoArrayCaptor.getValue().length);
+}
 
 
   /* COMMENTED OUT FOR NOW. CAN USE AS A MODEL FOR THE OTHER TESTS. - KEN
