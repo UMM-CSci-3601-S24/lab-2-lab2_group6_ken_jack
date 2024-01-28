@@ -147,6 +147,68 @@ public class TodoControllerSpec {
       assertEquals("John", todo.owner);
     }
   }
+  @Test
+  public void canLimitTodos() throws IOException {
+    // Add a query param map to the context that maps "limit"
+    // to "5".
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("limit", Arrays.asList(new String[] {"5"}));
+    // Tell the mock `ctx` object to return our query
+    // param map when `queryParamMap()` is called.
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    // Call the method on the mock controller with the added
+    // query param map to limit the result to just 5 todos
+    todoController.getTodos(ctx);
+
+    // Capture the todos that were passed to the json method
+    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(localTodoArrayCaptor.capture());
+
+    // Assert that the length of the returned todos is 5
+    assertEquals(5, localTodoArrayCaptor.getValue().length);
+  }
+
+  @Test
+  public void limitZeroReturnsNoTodos() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("limit", Arrays.asList(new String[] {"0"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(localTodoArrayCaptor.capture());
+
+    assertEquals(0, localTodoArrayCaptor.getValue().length);
+  }
+
+  @Test
+  public void limitThousandReturnsAllTodos() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("limit", Arrays.asList(new String[] {"1000"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    ArgumentCaptor<Todo[]> localTodoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+    verify(ctx).json(localTodoArrayCaptor.capture());
+
+    assertEquals(db.size(), localTodoArrayCaptor.getValue().length);
+  }
+
+ /*  @Test
+  public void nonNumericLimitReturnsBadRequest() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("limit", Arrays.asList(new String[] {"notANumber"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).status(400); // HTTP 400 Bad Request
+  } */
+
+
   /* COMMENTED OUT FOR NOW. CAN USE AS A MODEL FOR THE OTHER TESTS. - KEN
     Confirm that we can get all the users with age 25.
 
