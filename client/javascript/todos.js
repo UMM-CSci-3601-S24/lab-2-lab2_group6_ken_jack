@@ -8,6 +8,12 @@ function getFilteredTodos() {
     url = url + "&owner=" + getFieldValue("owner");
   }
 
+  var statusValue = document.getElementById("status").value;
+  if(statusValue != "") {
+    var statusBool = (statusValue.toLowerCase() === "complete");
+    url = url + "&status=" + statusBool;
+  }
+
   let checkedCategory = document.querySelector('input[name="category"]:checked').value;
 
   if (checkedCategory != "") {
