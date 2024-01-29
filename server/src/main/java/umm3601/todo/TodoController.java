@@ -78,6 +78,12 @@ public class TodoController implements Controller {
     ctx.json(todos);
     }
 
+    public void listTodos(Context ctx) {
+      Map<String, List<String>> queryParams = ctx.queryParamMap();
+      Todo[] todos = todoDatabase.listTodos(queryParams);
+      ctx.json(todos);
+    }
+
   /**
    * Setup routes for the `todo` collection endpoints.
    *
