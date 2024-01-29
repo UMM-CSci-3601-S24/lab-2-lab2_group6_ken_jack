@@ -109,12 +109,12 @@ public class TodoDatabase {
 
 
     // Filter status if defined
-    if (queryParams.containsKey("status")) {
-      String statusParam = queryParams.get("status").get(0);
-      boolean targetStatus = Boolean.parseBoolean(statusParam);
-      filteredTodos = Arrays.stream(filteredTodos)
-                            .filter(todo -> todo.status == targetStatus)
-                            .toArray(Todo[]::new);
+    if (queryParams.containsKey("status")) { // if the query contains status
+      String statusParam = queryParams.get("status").get(0); // get the status
+      boolean targetStatus = Boolean.parseBoolean(statusParam); // parse the status to a boolean
+      filteredTodos = Arrays.stream(filteredTodos)  // filter the todos by the status
+                            .filter(todo -> todo.status == targetStatus) // if the status is the same as the target status
+                            .toArray(Todo[]::new); // return the filtered todos
       }
 
     // Filter category if defined
