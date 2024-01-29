@@ -12,7 +12,12 @@ function getFilteredTodos() {
   if(statusValue != "") {
     var statusBool = (statusValue.toLowerCase() === "complete");
     url = url + "&status=" + statusBool;
+
+  var searchString = document.getElementById("searchString").value;
+  if(searchString != "") {
+    url = url + "&contains=" + encodeURIComponent(searchString);
   }
+}
 
   let checkedCategory = document.querySelector('input[name="category"]:checked').value;
 
