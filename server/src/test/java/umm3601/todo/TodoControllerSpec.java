@@ -278,6 +278,37 @@ public void canGetTodosWithContains() throws IOException {
   }
 }
 
+@Test
+public void canSortTodosByOwnerAlphabetically() throws IOException {
+  Map<String, List<String>> queryParams = new HashMap<>();
+  queryParams.put("orderBy", Arrays.asList(new String[] {"owner"}));
+  when(ctx.queryParamMap()).thenReturn(queryParams);
+
+  todoController.getTodos(ctx);
+
+  verify(ctx).json(localTodoArrayCaptor.capture());
+  Todo[] returnedTodos = localTodoArrayCaptor.getValue();
+
+  for (int i = 0; i < returnedTodos.length - 1; i++) {
+    assertTrue(returnedTodos[i].owner.compareTo(returnedTodos[i + 1].owner) <= 0);
+  }
+}
+
+@Test
+public void canSortTodosByStatusAlphabetically() throws IOException {
+  Map<String, List<String>> queryParams = new HashMap<>();
+  queryParams.put("orderBy", Arrays.asList(new String[] {"status"}));
+  when(ctx.queryParamMap()).thenReturn(queryParams);
+
+  todoController.getTodos(ctx);
+
+  verify(ctx).json(localTodoArrayCaptor.capture());
+  Todo[] returnedTodos = localTodoArrayCaptor.getValue();
+
+  for (int i = 0; i < returnedTodos.length - 1; i++) {
+    assertTrue(String.valueOf(returnedTodos[i].status).compareTo(String.valueOf(returnedTodos[i + 1].status)) <= 0);
+  }
+}
 
   /* COMMENTED OUT FOR NOW. CAN USE AS A MODEL FOR THE OTHER TESTS. - KEN
     Confirm that we can get all the users with age 25.
