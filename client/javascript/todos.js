@@ -8,17 +8,6 @@ function getFilteredTodos() {
     url = url + "&owner=" + getFieldValue("owner");
   }
 
-  var statusValue = document.getElementById("status").value;
-  if(statusValue != "") {
-    var statusBool = (statusValue.toLowerCase() === "complete");
-    url = url + "&status=" + statusBool;
-
-  var searchString = document.getElementById("searchString").value;
-  if(searchString != "") {
-    url = url + "&contains=" + encodeURIComponent(searchString);
-  }
-}
-
   let checkedCategory = document.querySelector('input[name="category"]:checked').value;
 
   if (checkedCategory != "") {
@@ -42,19 +31,3 @@ function getFilteredTodos() {
     document.getElementById('jsonDump').innerHTML = syntaxHighlight(JSON.stringify(returned_json, null, 2));
   });
 }
-
-//  getTodos() is called when the page loads to populate the table
-function getTodos() {
-  let limit = document.getElementById('limit').value; // Get the limit value from the input field
-  fetch('/api/todos?limit=' + limit)
-    .then((response) => {
-      if (!response.ok) {
-        throw Error(response.statusText);
-      }
-      return response.json();
-    })
-    .then((data) => {
-      // might need to change this later in order to integrate all filters
-    });
-}
-

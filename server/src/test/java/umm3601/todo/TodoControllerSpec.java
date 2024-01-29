@@ -211,7 +211,8 @@ public class TodoControllerSpec {
 
     verify(ctx).status(400); // HTTP 400 Bad Request
   } */
-/*
+
+  //  Testing when status is complete
   @Test
   public void statusCompleteReturnsCompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
@@ -220,16 +221,17 @@ public class TodoControllerSpec {
 
     todoController.getTodos(ctx);
 
-    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(todoArrayCaptor.capture());
+      ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+      verify(ctx).json(todoArrayCaptor.capture());
 
-    for (Todo todo : todoArrayCaptor.getValue()) {
-      assertTrue(todo.status);
+      for (Todo todo : todoArrayCaptor.getValue()) {
+        assertTrue(todo.status);
+      }
     }
-  } */
 
-  @Test
-  public void statusIncompleteReturnsIncompleteTodos() throws IOException {
+    // Testing when status is incomplete
+    @Test
+    public void statusIncompleteReturnsIncompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
     queryParams.put("status", Arrays.asList(new String[] {"incomplete"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
