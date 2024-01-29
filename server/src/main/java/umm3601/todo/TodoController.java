@@ -1,6 +1,9 @@
 package umm3601.todo;
 
 import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+
 
 import io.javalin.Javalin;
 import io.javalin.http.Context;
@@ -70,9 +73,10 @@ public class TodoController implements Controller {
    * @param ctx a Javalin HTTP context
    */
   public void getTodos(Context ctx) {
-    Todo[] todos = todoDatabase.listTodos(ctx.queryParamMap());
+    Map<String, List<String>> queryParams = ctx.queryParamMap();
+    Todo[] todos = todoDatabase.listTodos(queryParams);
     ctx.json(todos);
-  }
+    }
 
   /**
    * Setup routes for the `todo` collection endpoints.

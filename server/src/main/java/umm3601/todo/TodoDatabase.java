@@ -1,5 +1,6 @@
 package umm3601.todo;
 
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -66,6 +67,14 @@ public class TodoDatabase {
   public Todo[] listTodos(Map<String, List<String>> queryParams) {
     Todo[] filteredTodos = allTodos;
 
+    // contains filter
+    if (queryParams.containsKey("contains")) {
+      String containsParam = queryParams.get("contains").get(0);
+      filteredTodos = Arrays.stream(filteredTodos)
+                            .filter(t -> t.body.contains(containsParam))
+                            .toArray(Todo[]::new);
+    }
+
     if (queryParams.containsKey("limit")) {
        String limitParam = queryParams.get("limit").get(0);
        try {
@@ -76,7 +85,9 @@ public class TodoDatabase {
         } catch (NumberFormatException e) {
           throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
            }
-  }
+       }
+
+
 
  /*  COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
   // Filter age if defined
@@ -106,7 +117,7 @@ public class TodoDatabase {
       filteredTodos = Arrays.stream(filteredTodos)
                             .filter(todo -> todo.status == targetStatus)
                             .toArray(Todo[]::new);
-}
+      }
 
     return filteredTodos;
   }

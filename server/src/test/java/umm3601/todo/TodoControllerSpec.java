@@ -2,6 +2,7 @@ package umm3601.todo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
@@ -148,6 +149,7 @@ public class TodoControllerSpec {
       assertEquals("John", todo.owner);
     }
   }
+
   @Test
   public void canLimitTodos() throws IOException {
     // Add a query param map to the context that maps "limit"
@@ -252,6 +254,28 @@ public class TodoControllerSpec {
     verify(ctx).json(todoArrayCaptor.capture());
 
     assertEquals(db.size(), todoArrayCaptor.getValue().length);
+}
+
+@Test
+public void canGetTodosWithContains() throws IOException {
+  // Add a query param map to the context that maps "contains"
+  // to "some text".
+  Map<String, List<String>> queryParams = new HashMap<>();
+  queryParams.put("contains", Arrays.asList(new String[] {"some text"}));
+  // Tell the mock `ctx` object to return our query
+  // param map when `queryParamMap()` is called.
+  when(ctx.queryParamMap()).thenReturn(queryParams);
+
+  // Call the method on the mock controller with the added
+  // query param map to limit the result to just todos containing
+  // "some text".
+  todoController.getTodos(ctx);
+
+  // Confirm that all the todos passed to `json` contain "some text".
+  verify(ctx).json(localTodoArrayCaptor.capture());
+  for (Todo todo : localTodoArrayCaptor.getValue()) {
+    assertTrue(todo.body.contains("some text"));
+  }
 }
 
 
