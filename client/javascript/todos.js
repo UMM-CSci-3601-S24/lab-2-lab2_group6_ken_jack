@@ -54,7 +54,7 @@ function getTodos() {
       return response.json();
     })
     .then((data) => {
-      // ... existing logic ...
+      // might need to change this later in order to integrate all filters
     });
 }
 

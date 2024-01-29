@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class TodoDatabase {
    * @return an array of all the todos matching the given criteria
    */
   public Todo[] listTodos(Map<String, List<String>> queryParams) {
-    Todo[] filteredTodos = allTodos;
+    Todo[] filteredTodos = this.allTodos;
 
     // contains filter
     if (queryParams.containsKey("contains")) {
@@ -121,6 +122,34 @@ public class TodoDatabase {
       String targetCategory = queryParams.get("category").get(0);
       filteredTodos = filterTodosByCategory(filteredTodos, targetCategory);
       }
+
+    // Sorts the filteredTodos by the given parameter
+    if (queryParams.containsKey("orderBy")) {
+    String orderBy = queryParams.get("orderBy").get(0);
+    Comparator<Todo> comparator = null;
+
+    switch (orderBy) {
+      case "body":
+        comparator = Comparator.comparing(todo -> todo.body);
+        break;
+      case "status":
+        comparator = Comparator.comparing(todo -> Boolean.toString(todo.status));
+        break;
+      case "category":
+        comparator = Comparator.comparing(todo -> todo.category);
+        break;
+      case "owner":
+        comparator = Comparator.comparing(todo -> todo.owner);
+        break;
+        default:
+        // Do nothing
+        break;
+    }
+
+    if (comparator != null) {
+      Arrays.sort(filteredTodos, comparator);
+    }
+  }
 
     return filteredTodos;
   }
