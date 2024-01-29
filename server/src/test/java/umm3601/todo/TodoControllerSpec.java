@@ -211,7 +211,8 @@ public class TodoControllerSpec {
 
     verify(ctx).status(400); // HTTP 400 Bad Request
   } */
-/*
+
+  //  Testing when status is complete
   @Test
   public void statusCompleteReturnsCompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
@@ -220,16 +221,17 @@ public class TodoControllerSpec {
 
     todoController.getTodos(ctx);
 
-    ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
-    verify(ctx).json(todoArrayCaptor.capture());
+      ArgumentCaptor<Todo[]> todoArrayCaptor = ArgumentCaptor.forClass(Todo[].class);
+      verify(ctx).json(todoArrayCaptor.capture());
 
-    for (Todo todo : todoArrayCaptor.getValue()) {
-      assertTrue(todo.status);
+      for (Todo todo : todoArrayCaptor.getValue()) {
+        assertTrue(todo.status);
+      }
     }
-  } */
 
-  @Test
-  public void statusIncompleteReturnsIncompleteTodos() throws IOException {
+    // Testing when status is incomplete
+    @Test
+    public void statusIncompleteReturnsIncompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
     queryParams.put("status", Arrays.asList(new String[] {"incomplete"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
@@ -323,6 +325,41 @@ public void getTodosWithCategoryHomework() throws IOException {
         assertEquals("homework", todo.category);
     }
 }
+
+
+@Test
+public void canSortTodosByOwnerAlphabetically() throws IOException {
+  Map<String, List<String>> queryParams = new HashMap<>();
+  queryParams.put("orderBy", Arrays.asList(new String[] {"owner"}));
+  when(ctx.queryParamMap()).thenReturn(queryParams);
+
+  todoController.getTodos(ctx);
+
+  verify(ctx).json(localTodoArrayCaptor.capture());
+  Todo[] returnedTodos = localTodoArrayCaptor.getValue();
+
+  for (int i = 0; i < returnedTodos.length - 1; i++) {
+    assertTrue(returnedTodos[i].owner.compareTo(returnedTodos[i + 1].owner) <= 0);
+  }
+}
+
+@Test
+public void canSortTodosByStatusAlphabetically() throws IOException {
+  Map<String, List<String>> queryParams = new HashMap<>();
+  queryParams.put("orderBy", Arrays.asList(new String[] {"status"}));
+  when(ctx.queryParamMap()).thenReturn(queryParams);
+
+  todoController.getTodos(ctx);
+
+  verify(ctx).json(localTodoArrayCaptor.capture());
+  Todo[] returnedTodos = localTodoArrayCaptor.getValue();
+
+  for (int i = 0; i < returnedTodos.length - 1; i++) {
+    assertTrue(String.valueOf(returnedTodos[i].status).compareTo(String.valueOf(returnedTodos[i + 1].status)) <= 0);
+  }
+}
+
+
 
 
   /* COMMENTED OUT FOR NOW. CAN USE AS A MODEL FOR THE OTHER TESTS. - KEN

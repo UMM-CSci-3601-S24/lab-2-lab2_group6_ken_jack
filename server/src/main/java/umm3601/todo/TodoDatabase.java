@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -64,7 +65,7 @@ public class TodoDatabase {
    * @return an array of all the todos matching the given criteria
    */
   public Todo[] listTodos(Map<String, List<String>> queryParams) {
-    Todo[] filteredTodos = allTodos;
+    Todo[] filteredTodos = this.allTodos;
 
     // contains filter
     if (queryParams.containsKey("contains")) {
@@ -97,12 +98,12 @@ public class TodoDatabase {
     }
 
     // Filter status if defined
-    if (queryParams.containsKey("status")) {
-      String statusParam = queryParams.get("status").get(0);
-      boolean targetStatus = Boolean.parseBoolean(statusParam);
-      filteredTodos = Arrays.stream(filteredTodos)
-          .filter(todo -> todo.status == targetStatus)
-          .toArray(Todo[]::new);
+    if (queryParams.containsKey("status")) { // if the query contains status
+      String statusParam = queryParams.get("status").get(0); // get the status
+      boolean targetStatus = "complete".equalsIgnoreCase(statusParam); // parse the status to a boolean
+      filteredTodos = Arrays.stream(filteredTodos) // filter the todos by the status
+          .filter(todo -> todo.status == targetStatus) // if the status is the same as the target status
+          .toArray(Todo[]::new); // return the filtered todos
     }
 
     // Filter category if defined
@@ -110,6 +111,34 @@ public class TodoDatabase {
       String targetCategory = queryParams.get("category").get(0);
       filteredTodos = filterTodosByCategory(filteredTodos, targetCategory);
     }
+
+    // Sorts the filteredTodos by the given parameter
+    if (queryParams.containsKey("orderBy")) {
+      String orderBy = queryParams.get("orderBy").get(0);
+      Comparator<Todo> comparator = null;
+
+      switch (orderBy) {
+        case "body":
+          comparator = Comparator.comparing(todo -> todo.body);
+          break;
+        case "status":
+          comparator = Comparator.comparing(todo -> Boolean.toString(todo.status));
+          break;
+        case "category":
+          comparator = Comparator.comparing(todo -> todo.category);
+          break;
+        case "owner":
+          comparator = Comparator.comparing(todo -> todo.owner);
+          break;
+        default:
+          // Do nothing
+          break;
+    }
+      if (comparator != null) {
+        Arrays.sort(filteredTodos, comparator);
+      }
+    }
+
 
     if (queryParams.containsKey("limit")) {
       String limitParam = queryParams.get("limit").get(0);
@@ -121,7 +150,7 @@ public class TodoDatabase {
       } catch (NumberFormatException e) {
         throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
       }
-    }
+      
     return filteredTodos;
   }
 
