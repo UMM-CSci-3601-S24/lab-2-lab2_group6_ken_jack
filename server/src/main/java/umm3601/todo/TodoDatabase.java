@@ -75,18 +75,6 @@ public class TodoDatabase {
           .toArray(Todo[]::new);
     }
 
-    if (queryParams.containsKey("limit")) {
-      String limitParam = queryParams.get("limit").get(0);
-      try {
-        int limit = Integer.parseInt(limitParam);
-        filteredTodos = Arrays.stream(filteredTodos)
-            .limit(limit)
-            .toArray(Todo[]::new);
-      } catch (NumberFormatException e) {
-        throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
-      }
-    }
-
     /*
      * COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
      * // Filter age if defined
@@ -145,15 +133,26 @@ public class TodoDatabase {
         default:
           // Do nothing
           break;
-      }
-
+    }
       if (comparator != null) {
         Arrays.sort(filteredTodos, comparator);
       }
     }
 
+
+    if (queryParams.containsKey("limit")) {
+      String limitParam = queryParams.get("limit").get(0);
+      try {
+        int limit = Integer.parseInt(limitParam);
+        filteredTodos = Arrays.stream(filteredTodos)
+            .limit(limit)
+            .toArray(Todo[]::new);
+      } catch (NumberFormatException e) {
+        throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
+      }
+    }
     return filteredTodos;
-  }
+}
 
   /*
    * COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
