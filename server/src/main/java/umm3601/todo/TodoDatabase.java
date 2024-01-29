@@ -66,8 +66,7 @@ public class TodoDatabase {
    * @return an array of all the todos matching the given criteria
    */
   public Todo[] listTodos(Map<String, List<String>> queryParams) {
-    Todo[] allTodos = this.allTodos;
-    Todo[] filteredTodos = allTodos;
+    Todo[] filteredTodos = this.allTodos;
 
     // contains filter
     if (queryParams.containsKey("contains")) {
@@ -138,6 +137,9 @@ public class TodoDatabase {
         break;
       case "owner":
         comparator = Comparator.comparing(todo -> todo.owner);
+        break;
+        default:
+        // Do nothing
         break;
     }
 
