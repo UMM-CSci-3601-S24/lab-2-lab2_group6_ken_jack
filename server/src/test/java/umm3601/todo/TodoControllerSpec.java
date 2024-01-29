@@ -2,6 +2,7 @@ package umm3601.todo;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -276,6 +277,51 @@ public void canGetTodosWithContains() throws IOException {
   for (Todo todo : localTodoArrayCaptor.getValue()) {
     assertTrue(todo.body.contains("some text"));
   }
+}
+
+// Tests for filtering todos by category = any
+@Test
+public void getTodosWithCategoryAny() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("category", Arrays.asList(new String[] {"any"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(localTodoArrayCaptor.capture());
+    for (Todo todo : localTodoArrayCaptor.getValue()) {
+        assertNotNull(todo.category);
+    }
+}
+
+// Tests for filtering todos by category = video games
+@Test
+public void getTodosWithCategoryVideoGames() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("category", Arrays.asList(new String[] {"video games"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(localTodoArrayCaptor.capture());
+    for (Todo todo : localTodoArrayCaptor.getValue()) {
+        assertEquals("video games", todo.category);
+    }
+}
+
+// Tests for filtering todos by category = homework
+@Test
+public void getTodosWithCategoryHomework() throws IOException {
+    Map<String, List<String>> queryParams = new HashMap<>();
+    queryParams.put("category", Arrays.asList(new String[] {"homework"}));
+    when(ctx.queryParamMap()).thenReturn(queryParams);
+
+    todoController.getTodos(ctx);
+
+    verify(ctx).json(localTodoArrayCaptor.capture());
+    for (Todo todo : localTodoArrayCaptor.getValue()) {
+        assertEquals("homework", todo.category);
+    }
 }
 
 
