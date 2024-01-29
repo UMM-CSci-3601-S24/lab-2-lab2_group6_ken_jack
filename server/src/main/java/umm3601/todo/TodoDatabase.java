@@ -1,6 +1,5 @@
 package umm3601.todo;
 
-
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
@@ -47,13 +46,13 @@ public class TodoDatabase {
     return allTodos.length;
   }
 
-/**
-    Get the single todo specified by the given ID. Return `null` if there is no
-    todo with that ID.
-
-    @param id the ID of the desired todo
-    @return the todo with the given ID, or null if there is no todo with that ID
-*/
+  /**
+   * Get the single todo specified by the given ID. Return `null` if there is no
+   * todo with that ID.
+   *
+   * @param id the ID of the desired todo
+   * @return the todo with the given ID, or null if there is no todo with that ID
+   */
   public Todo getTodo(String id) {
     return Arrays.stream(allTodos).filter(x -> x._id.equals(id)).findFirst().orElse(null);
   }
@@ -71,90 +70,96 @@ public class TodoDatabase {
     if (queryParams.containsKey("contains")) {
       String containsParam = queryParams.get("contains").get(0);
       filteredTodos = Arrays.stream(filteredTodos)
-                            .filter(t -> t.body.contains(containsParam))
-                            .toArray(Todo[]::new);
+          .filter(t -> t.body.contains(containsParam))
+          .toArray(Todo[]::new);
     }
 
-    if (queryParams.containsKey("limit")) {
-       String limitParam = queryParams.get("limit").get(0);
-       try {
-           int limit = Integer.parseInt(limitParam);
-           filteredTodos = Arrays.stream(filteredTodos)
-                                .limit(limit)
-                                .toArray(Todo[]::new);
-        } catch (NumberFormatException e) {
-          throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
-           }
-       }
+    /*
+     * COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
+     * // Filter age if defined
+     * if (queryParams.containsKey("age")) {
+     * String ageParam = queryParams.get("age").get(0);
+     * try {
+     * int targetAge = Integer.parseInt(ageParam);
+     * filteredTodos = filterTodosByAge(filteredTodos, targetAge);
+     * }
+     * catch (NumberFormatException e) {
+     * throw new BadRequestResponse("Specified age '" + ageParam +
+     * "' can't be parsed to an integer");
+     * }
+     * }
+     */
 
- /*  COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
-  // Filter age if defined
-  if (queryParams.containsKey("age")) {
-    String ageParam = queryParams.get("age").get(0);
-    try {
-      int targetAge = Integer.parseInt(ageParam);
-      filteredTodos = filterTodosByAge(filteredTodos, targetAge);
-    }
-    catch (NumberFormatException e) {
-      throw new BadRequestResponse("Specified age '" + ageParam + "' can't be parsed to an integer");
-      }
-    } */
-
-  //Filter owner if defined
+    // Filter owner if defined
     if (queryParams.containsKey("owner")) {
       String targetOwner = queryParams.get("owner").get(0);
       filteredTodos = filterTodosByOwner(filteredTodos, targetOwner);
-      }
-
+    }
 
     // Filter status if defined
     if (queryParams.containsKey("status")) {
       String statusParam = queryParams.get("status").get(0);
       boolean targetStatus = Boolean.parseBoolean(statusParam);
       filteredTodos = Arrays.stream(filteredTodos)
-                            .filter(todo -> todo.status == targetStatus)
-                            .toArray(Todo[]::new);
-      }
+          .filter(todo -> todo.status == targetStatus)
+          .toArray(Todo[]::new);
+    }
 
     // Filter category if defined
     if (queryParams.containsKey("category")) {
       String targetCategory = queryParams.get("category").get(0);
       filteredTodos = filterTodosByCategory(filteredTodos, targetCategory);
-      }
+    }
 
+    if (queryParams.containsKey("limit")) {
+      String limitParam = queryParams.get("limit").get(0);
+      try {
+        int limit = Integer.parseInt(limitParam);
+        filteredTodos = Arrays.stream(filteredTodos)
+            .limit(limit)
+            .toArray(Todo[]::new);
+      } catch (NumberFormatException e) {
+        throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
+      }
+    }
     return filteredTodos;
   }
 
-  /* COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
-    Get an array of all the todos having the target age.
+  /*
+   * COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
+   * Get an array of all the todos having the target age.
+   *
+   * @param todos the list of todos to filter by age
+   *
+   * @param targetAge the target age to look for
+   *
+   * @return an array of all the todos from the given list that have the target
+   * age
+   *
+   * public Todo[] filterTodosByAge(Todo[] todos, int targetAge) {
+   * return Arrays.stream(todos).filter(x -> x.owner ==
+   * targetOwner).toArray(Todo[]::new);
+   * }
+   */
 
-    @param todos     the list of todos to filter by age
-    @param targetAge the target age to look for
-    @return an array of all the todos from the given list that have the target
-            age
-
-  public Todo[] filterTodosByAge(Todo[] todos, int targetAge) {
-    return Arrays.stream(todos).filter(x -> x.owner == targetOwner).toArray(Todo[]::new);
-  } */
-
-/**
-    Get an array of all the todos having the target owner.
-
-    @param todos         the list of todos to filter by owner
-    @param targetOwner the target owner to look for
-    @return an array of all the todos from the given list that have the target
-            Owner
-*/
-  //Filter owner method
+  /**
+   * Get an array of all the todos having the target owner.
+   *
+   * @param todos       the list of todos to filter by owner
+   * @param targetOwner the target owner to look for
+   * @return an array of all the todos from the given list that have the target
+   *         Owner
+   */
+  // Filter owner method
   public Todo[] filterTodosByOwner(Todo[] todos, String targetOwner) {
     return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(Todo[]::new);
   }
 
-  //Filter category method
+  // Filter category method
   public Todo[] filterTodosByCategory(Todo[] todos, String targetCategory) {
     return Arrays.stream(todos)
-                 .filter(todo -> todo.category.equals(targetCategory))
-                 .toArray(Todo[]::new);
+        .filter(todo -> todo.category.equals(targetCategory))
+        .toArray(Todo[]::new);
   }
 
 }
