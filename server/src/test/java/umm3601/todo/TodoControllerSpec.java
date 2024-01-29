@@ -216,7 +216,7 @@ public class TodoControllerSpec {
   @Test
   public void statusCompleteReturnsCompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("status", Arrays.asList(new String[] {"true"}));
+    queryParams.put("status", Arrays.asList(new String[] {"complete"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -233,7 +233,7 @@ public class TodoControllerSpec {
     @Test
     public void statusIncompleteReturnsIncompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("status", Arrays.asList(new String[] {"false"}));
+    queryParams.put("status", Arrays.asList(new String[] {"incomplete"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
