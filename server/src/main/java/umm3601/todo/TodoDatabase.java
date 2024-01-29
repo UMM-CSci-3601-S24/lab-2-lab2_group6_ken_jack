@@ -88,8 +88,6 @@ public class TodoDatabase {
            }
        }
 
-
-
  /*  COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
   // Filter age if defined
   if (queryParams.containsKey("age")) {
@@ -107,8 +105,7 @@ public class TodoDatabase {
     if (queryParams.containsKey("owner")) {
       String targetOwner = queryParams.get("owner").get(0);
       filteredTodos = filterTodosByOwner(filteredTodos, targetOwner);
-    }
-    // Process other query parameters here...
+      }
 
 
     // Filter status if defined
@@ -118,6 +115,12 @@ public class TodoDatabase {
       filteredTodos = Arrays.stream(filteredTodos)
                             .filter(todo -> todo.status == targetStatus)
                             .toArray(Todo[]::new);
+      }
+
+    // Filter category if defined
+    if (queryParams.containsKey("category")) {
+      String targetCategory = queryParams.get("category").get(0);
+      filteredTodos = filterTodosByCategory(filteredTodos, targetCategory);
       }
 
     // Sorts the filteredTodos by the given parameter
@@ -171,8 +174,16 @@ public class TodoDatabase {
     @return an array of all the todos from the given list that have the target
             Owner
 */
+  //Filter owner method
   public Todo[] filterTodosByOwner(Todo[] todos, String targetOwner) {
     return Arrays.stream(todos).filter(x -> x.owner.equals(targetOwner)).toArray(Todo[]::new);
+  }
+
+  //Filter category method
+  public Todo[] filterTodosByCategory(Todo[] todos, String targetCategory) {
+    return Arrays.stream(todos)
+                 .filter(todo -> todo.category.equals(targetCategory))
+                 .toArray(Todo[]::new);
   }
 
 }
