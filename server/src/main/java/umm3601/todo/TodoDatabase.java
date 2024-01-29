@@ -150,9 +150,9 @@ public class TodoDatabase {
       } catch (NumberFormatException e) {
         throw new BadRequestResponse("Specified limit '" + limitParam + "' can't be parsed to an integer");
       }
-      
+    }
     return filteredTodos;
-  }
+}
 
   /*
    * COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
