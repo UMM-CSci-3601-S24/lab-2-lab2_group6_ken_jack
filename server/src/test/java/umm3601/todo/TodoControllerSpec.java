@@ -147,7 +147,7 @@ public class TodoControllerSpec {
   @Test
   public void filterTodosByOwner() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("owner", Arrays.asList(new String[] { "John" }));
+    queryParams.put("owner", Arrays.asList(new String[] {"John"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -161,10 +161,9 @@ public class TodoControllerSpec {
   // Tests that we can limit todos returned to 5
   @Test
   public void canLimitTodos() throws IOException {
-    // Add a query param map to the context that maps "limit"
-    // to "5".
+    // Add a query param map to the context that maps "limit"// to "5".
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("limit", Arrays.asList(new String[] { "5" }));
+    queryParams.put("limit", Arrays.asList(new String[] {"5"}));
     // Tell the mock `ctx` object to return our query
     // param map when `queryParamMap()` is called.
     when(ctx.queryParamMap()).thenReturn(queryParams);
@@ -185,7 +184,7 @@ public class TodoControllerSpec {
   @Test
   public void limitZeroReturnsNoTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("limit", Arrays.asList(new String[] { "0" }));
+    queryParams.put("limit", Arrays.asList(new String[] {"0"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -200,7 +199,7 @@ public class TodoControllerSpec {
   @Test
   public void limitThousandReturnsAllTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("limit", Arrays.asList(new String[] { "1000" }));
+    queryParams.put("limit", Arrays.asList(new String[] {"1000"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -215,7 +214,7 @@ public class TodoControllerSpec {
   @Test
   public void statusCompleteReturnsCompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("status", Arrays.asList(new String[] { "complete" }));
+    queryParams.put("status", Arrays.asList(new String[] {"complete"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -232,7 +231,7 @@ public class TodoControllerSpec {
   @Test
   public void statusIncompleteReturnsIncompleteTodos() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("status", Arrays.asList(new String[] { "incomplete" }));
+    queryParams.put("status", Arrays.asList(new String[] {"incomplete"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -265,7 +264,7 @@ public class TodoControllerSpec {
     // Add a query param map to the context that maps "contains"
     // to "some text".
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("contains", Arrays.asList(new String[] { "some text" }));
+    queryParams.put("contains", Arrays.asList(new String[] {"some text"}));
     // Tell the mock `ctx` object to return our query
     // param map when `queryParamMap()` is called.
     when(ctx.queryParamMap()).thenReturn(queryParams);
@@ -285,7 +284,7 @@ public class TodoControllerSpec {
   @Test
   public void getTodosWithCategoryAny() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("category", Arrays.asList(new String[] { "any" }));
+    queryParams.put("category", Arrays.asList(new String[] {"any"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -300,7 +299,7 @@ public class TodoControllerSpec {
   @Test
   public void getTodosWithCategoryVideoGames() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("category", Arrays.asList(new String[] { "video games" }));
+    queryParams.put("category", Arrays.asList(new String[] {"video games"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -315,7 +314,7 @@ public class TodoControllerSpec {
   @Test
   public void getTodosWithCategoryHomework() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("category", Arrays.asList(new String[] { "homework" }));
+    queryParams.put("category", Arrays.asList(new String[] {"homework"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -330,7 +329,7 @@ public class TodoControllerSpec {
   @Test
   public void canSortTodosByOwnerAlphabetically() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("orderBy", Arrays.asList(new String[] { "owner" }));
+    queryParams.put("orderBy", Arrays.asList(new String[] {"owner"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
@@ -347,7 +346,7 @@ public class TodoControllerSpec {
   @Test
   public void canSortTodosByStatusAlphabetically() throws IOException {
     Map<String, List<String>> queryParams = new HashMap<>();
-    queryParams.put("orderBy", Arrays.asList(new String[] { "status" }));
+    queryParams.put("orderBy", Arrays.asList(new String[] {"status"}));
     when(ctx.queryParamMap()).thenReturn(queryParams);
 
     todoController.getTodos(ctx);
