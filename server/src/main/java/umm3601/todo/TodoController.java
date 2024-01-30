@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 
-
 import io.javalin.Javalin;
 import io.javalin.http.Context;
 import io.javalin.http.HttpStatus;
 import io.javalin.http.NotFoundResponse;
+
 import umm3601.Controller;
 
 /**
@@ -31,7 +31,7 @@ public class TodoController implements Controller {
     this.todoDatabase = todoDatabase;
   }
 
-  /***
+  /**
    * Create a database using the json file, use it as data source for a new
    * TodoController
    *
@@ -50,12 +50,11 @@ public class TodoController implements Controller {
     return todoController;
   }
 
-  // COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
   /**
-     Get the single todo specified by the `id` parameter in the request.
-
-    @param ctx a Javalin HTTP context
-*/
+   * Get the single todo specified by the `id` parameter in the request.
+   *
+   * @param ctx a Javalin HTTP context
+   */
   public void getTodo(Context ctx) {
     String id = ctx.pathParam("id");
     Todo todo = todoDatabase.getTodo(id);
@@ -68,47 +67,35 @@ public class TodoController implements Controller {
   }
 
   /**
-   * Get a JSON response with a list of all the todos in the "database".
+   * Handles HTTP requests to list all todos. It retrieves query parameters from
+   * the request, uses them to filter and sort the todos in the database, and
+   * sends the
+   * resulting list of todos as a JSON response.
    *
    * @param ctx a Javalin HTTP context
    */
   public void getTodos(Context ctx) {
     Map<String, List<String>> queryParams = ctx.queryParamMap();
-    Todo[] todos = todoDatabase.listTodos(queryParams);
+    Todo[] todos = todoDatabase.getTodos(queryParams);
     ctx.json(todos);
-    }
-
-    public void listTodos(Context ctx) {
-      Map<String, List<String>> queryParams = ctx.queryParamMap();
-      Todo[] todos = todoDatabase.listTodos(queryParams);
-      ctx.json(todos);
-    }
+  }
 
   /**
-   * Setup routes for the `todo` collection endpoints.
+   * * Adds route handlers to the Javalin server instance.
    *
-   * These endpoints are:
-   * - `GET /api/todos?age=NUMBER&company=STRING&name=STRING`
-   * - List todos, filtered using query parameters
-   * - `age`, `company`, and `name` are optional query parameters
-   * - `GET /api/todos/:id`
-   * - Get the specified todo
-   *
-   * GROUPS SHOULD CREATE THEIR OWN CONTROLLER FOR TODOS THAT
-   * IMPLEMENTS THE `Controller` INTERFACE.
-   * You'll then implement the `addRoutes` method for that controller,
-   * which will set up the routes for that data. The `Server#setupRoutes`
-   * method will then call `addRoutes` for each controller, which will
-   * add the routes for that controller's data.
+   * Defines two GET routes:
+   * 1. "/api/todos/{id}" - Retrieves a single todo item by its ID.
+   * 2. "/api/todos" - Retrieves a list of todo items, with optional filtering
+   * based on query parameters.
    *
    * @param server The Javalin server instance
    */
   @Override
   public void addRoutes(Javalin server) {
-    // Get specific todo - COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
+    // Gets the single todo with the given ID
     server.get("/api/todos/{id}", this::getTodo);
 
-    // List todos, filtered using query parameters
+    // Gets todos with any given filters
     server.get("/api/todos", this::getTodos);
   }
 }
