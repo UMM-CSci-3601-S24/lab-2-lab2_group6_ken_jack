@@ -12,8 +12,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 
 import io.javalin.http.BadRequestResponse;
 
-//import io.javalin.http.BadRequestResponse;  // COMMENTED OUT FOR FOR LIST ALL TODOS TASK - Ken
-
 /**
  * A fake "database" of todo info
  * <p>
@@ -64,7 +62,7 @@ public class TodoDatabase {
    * @param queryParams map of key-value pairs for the query
    * @return an array of all the todos matching the given criteria
    */
-  public Todo[] listTodos(Map<String, List<String>> queryParams) {
+  public Todo[] getTodos(Map<String, List<String>> queryParams) {
     Todo[] filteredTodos = this.allTodos;
 
     // contains filter
@@ -74,22 +72,6 @@ public class TodoDatabase {
           .filter(t -> t.body.contains(containsParam))
           .toArray(Todo[]::new);
     }
-
-    /*
-     * COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
-     * // Filter age if defined
-     * if (queryParams.containsKey("age")) {
-     * String ageParam = queryParams.get("age").get(0);
-     * try {
-     * int targetAge = Integer.parseInt(ageParam);
-     * filteredTodos = filterTodosByAge(filteredTodos, targetAge);
-     * }
-     * catch (NumberFormatException e) {
-     * throw new BadRequestResponse("Specified age '" + ageParam +
-     * "' can't be parsed to an integer");
-     * }
-     * }
-     */
 
     // Filter owner if defined
     if (queryParams.containsKey("owner")) {
@@ -112,11 +94,12 @@ public class TodoDatabase {
       filteredTodos = filterTodosByCategory(filteredTodos, targetCategory);
     }
 
-    // Sorts the filteredTodos by the given parameter
+    // Sorts the todos by the given parameter (orderBy, body, status, category,
+    // owner)
     if (queryParams.containsKey("orderBy")) {
       String orderBy = queryParams.get("orderBy").get(0);
       Comparator<Todo> comparator = null;
-
+      // Switch statement to determine which comparator to use
       switch (orderBy) {
         case "body":
           comparator = Comparator.comparing(todo -> todo.body);
@@ -133,13 +116,13 @@ public class TodoDatabase {
         default:
           // Do nothing
           break;
-    }
+      }
       if (comparator != null) {
         Arrays.sort(filteredTodos, comparator);
       }
     }
 
-
+    // Filter limit if defined
     if (queryParams.containsKey("limit")) {
       String limitParam = queryParams.get("limit").get(0);
       try {
@@ -152,24 +135,7 @@ public class TodoDatabase {
       }
     }
     return filteredTodos;
-}
-
-  /*
-   * COMMENTED OUT, NEED THE DIFFERENT PARAMETERS FOR TODOS - Ken
-   * Get an array of all the todos having the target age.
-   *
-   * @param todos the list of todos to filter by age
-   *
-   * @param targetAge the target age to look for
-   *
-   * @return an array of all the todos from the given list that have the target
-   * age
-   *
-   * public Todo[] filterTodosByAge(Todo[] todos, int targetAge) {
-   * return Arrays.stream(todos).filter(x -> x.owner ==
-   * targetOwner).toArray(Todo[]::new);
-   * }
-   */
+  }
 
   /**
    * Get an array of all the todos having the target owner.
