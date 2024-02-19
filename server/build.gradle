@@ -29,7 +29,7 @@ repositories {
 // External dependencies that our application utilizes
 dependencies {
   // Javalin, a simple web framework for Java
-  implementation 'io.javalin:javalin:5.6.3'
+  implementation 'io.javalin:javalin:6.1.0'
 
   // Jackson, a JSON library for Java
   implementation 'com.fasterxml.jackson.core:jackson-databind:2.16.1'
